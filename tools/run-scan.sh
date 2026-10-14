@@ -3,7 +3,9 @@
 set -euo pipefail
 
 readonly REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-readonly SHANNON_DIR="${REPO_ROOT}/.cache/shannon"
+readonly SHANNON_COMMIT="2468b67d9e40d70d0b189462c5041c24e1dc886c"
+readonly CACHE_ROOT="${XDG_CACHE_HOME:-${HOME}/.cache}/shannon-daybreak-blue-demo"
+readonly SHANNON_DIR="${CACHE_ROOT}/shannon-${SHANNON_COMMIT:0:7}"
 readonly SHANNON="${SHANNON_DIR}/shannon"
 readonly WORKSPACE="${SHANNON_WORKSPACE:-shannon-daybreak-blue-demo}"
 

@@ -1,5 +1,6 @@
 node_modules/
 .cache/
+.playwright/
 .shannon/
 workspaces/
 Security-Assessment-Report.*

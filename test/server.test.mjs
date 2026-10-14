@@ -25,4 +25,11 @@ test('documents the intentionally vulnerable cross-user note response', async ()
   const body = await response.json()
   assert.equal(body.note.ownerId, 'bob')
 })
-// End of file.
+
+test('documents the intentionally vulnerable reflected XSS response', async () => {
+  const payload = '<script>window.__xssProof = 1</script>'
+  const response = await fetch(`${baseUrl}/search?q=${encodeURIComponent(payload)}`)
+
+  assert.equal(response.status, 200)
+  assert.equal(await response.text(), `<h1>Search results for ${payload}</h1>`)
+})

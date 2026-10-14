@@ -1,4 +1,6 @@
+import { realpathSync } from 'node:fs'
 import { createServer } from 'node:http'
+import { fileURLToPath } from 'node:url'
 
 const notes = new Map([
   ['1', { id: '1', ownerId: 'alice', body: 'Alice demo note' }],
@@ -49,11 +51,17 @@ export function createDemoServer() {
     response.writeHead(404).end('Not found')
   })
 }
-if (process.argv[1] === new URL(import.meta.url).pathname) {
+function isDirectExecution() {
+  return Boolean(
+    process.argv[1] &&
+      realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)),
+  )
+}
+
+if (isDirectExecution()) {
   const host = process.env.HOST ?? '127.0.0.1'
   const port = Number(process.env.PORT ?? 4173)
   createDemoServer().listen(port, host, () => {
     console.log(`Demo listening on http://${host}:${port}`)
   })
 }
-// End of file.

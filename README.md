@@ -29,6 +29,8 @@ npm run shannon:build
 HOST=0.0.0.0 npm start
 ```
 
+`0.0.0.0`で起動すると、同じLANの別端末から到達できる場合があります。信頼できるネットワークだけで実行し、スキャン後は停止してください。
+
 ターミナル2でDaybreak Blueの認証とモデルを検証します。
 
 ```bash
@@ -59,15 +61,17 @@ Shannonへ渡すモデルは`openai:gpt-daybreak-blue-latest`です。`tools/sha
 - 検出結果: 反射型XSS、認証・オブジェクト所有権チェックの欠落
 - 実証攻撃: 無効
 
-初回の`recon`は成果物の保存後に失敗しましたが、Shannonの自動再試行で完了しました。レポートは`.cache/shannon/workspaces/<workspace>/`に生成されます。
+初回の`recon`は成果物の保存後に失敗しましたが、Shannonの自動再試行で完了しました。レポートは`${XDG_CACHE_HOME:-$HOME/.cache}/shannon-daybreak-blue-demo/shannon-2468b67/workspaces/<workspace>/`に生成されます。
 
 ## 仕組み
 
-`tools/build-shannon.sh`はShannonの特定コミットを`.cache/shannon`へcloneし、次の3パッケージだけを1.2.0へ更新してローカルworkerイメージを作ります。
+`tools/build-shannon.sh`はShannonの特定コミットを`${XDG_CACHE_HOME:-$HOME/.cache}/shannon-daybreak-blue-demo/`の下へcloneし、次の3パッケージだけを1.2.0へ更新してローカルworkerイメージを作ります。コミットごとに別のディレクトリを使うため、更新時に既存の変更済みcheckoutと衝突しません。
 
 - `@earendil-works/pi-agent-core`
 - `@earendil-works/pi-ai`
 - `@earendil-works/pi-coding-agent`
+
+pnpmの`minimumReleaseAge`は無効にせず、これらが依存する`@earendil-works/pi-*`だけを`minimumReleaseAgeExclude`へ追加します。
 
 Shannon 3.4.0の標準workerはPi 0.84.4を使うため、Pi 0.99.0で追加されたOpenAIのChatGPT OAuthとDaybreak Blueを扱えません。Pi 1.2.0へ更新すると、`openai:gpt-daybreak-blue-latest`のモデル検証とCyber Access確認が通ります。
 
@@ -75,6 +79,7 @@ Shannon 3.4.0の標準workerはPi 0.84.4を使うため、Pi 0.99.0で追加さ�
 
 - 対象は`host.docker.internal:4173`に固定しています。
 - デモデータはメモリー上の架空データだけです。
-- `.cache`とShannonの生成物はGit管理から除外します。
+- Shannonのcheckoutとレポートは対象リポジトリの外に置き、過去のスキャン結果を次のスキャンへ混入させません。
+- ローカルで生成される`.cache`、`.playwright`、`.shannon`、`workspaces`はGit管理から除外します。
 - スキャン設定は分析専用です。
 - 認証ファイル`~/.pi/agent/auth.json`をリポジトリへコピーしません。
