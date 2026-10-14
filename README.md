@@ -49,7 +49,16 @@ npm run shannon:scan
 SHANNON_WORKSPACE=daybreak-blue-run-2 npm run shannon:scan
 ```
 
-Shannonへ渡すモデルは`openai:gpt-daybreak-blue-latest`です。`tools/shannon.yaml`では`exploit: 'false'`にしており、実証攻撃は行いません。
+Shannonへ渡す既定のモデルは`openai:gpt-daybreak-blue-latest`です。`tools/shannon.yaml`では`exploit: 'false'`にしており、実証攻撃は行いません。
+
+比較実験では`SHANNON_MODEL`でモデルだけを上書きできます。
+
+```bash
+SHANNON_MODEL=openai:gpt-6.1-sol npm run shannon:validate
+SHANNON_MODEL=openai:gpt-6.1-sol SHANNON_WORKSPACE=gpt-6-1-sol-run npm run shannon:scan
+```
+
+スキャンは`shannon:validate`が成功した場合だけ実行してください。別モデルの結果が既定workspaceへ混ざらないよう、既定以外のモデルでは`SHANNON_WORKSPACE`の指定を必須にしています。2026年10月14日の検証では、`gpt-6.1-sol`のCyber Access確認が`OpenAiCyberAccessError`で失敗したため、フルスキャンは開始していません。Daybreak Blueは同じ認証と対象でCyber Access確認を通過し、全工程を完走しました。
 
 ## 検証結果
 

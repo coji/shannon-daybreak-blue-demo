@@ -17,7 +17,7 @@ jq -e '.openai.type == "oauth"' "${AUTH_FILE}" >/dev/null || {
 
 unset OPENAI_API_KEY OPENAI_BASE_URL SHANNON_AI_API_KEY SHANNON_AI_BASE_URL
 export SHANNON_USE_PI_AUTH=1
-export SHANNON_AI_MODEL=openai:gpt-daybreak-blue-latest
+export SHANNON_AI_MODEL="${SHANNON_MODEL:-openai:gpt-daybreak-blue-latest}"
 
 (
   cd "${SHANNON_DIR}"
