@@ -41,7 +41,25 @@ npm run shannon:validate
 npm run shannon:scan
 ```
 
+失敗したworkspaceを使い直すと、Shannonは途中状態から再開します。最初からやり直す場合は、別の名前を指定してください。
+
+```bash
+SHANNON_WORKSPACE=daybreak-blue-run-2 npm run shannon:scan
+```
+
 Shannonへ渡すモデルは`openai:gpt-daybreak-blue-latest`です。`tools/shannon.yaml`では`exploit: 'false'`にしており、実証攻撃は行いません。
+
+## 検証結果
+
+2026年10月14日に、Daybreak Blueで全工程を完走しました。
+
+- 所要時間: 76分18秒
+- Shannonの表示コスト: $20.7914
+- 実行agent: 8（skipなし）
+- 検出結果: 反射型XSS、認証・オブジェクト所有権チェックの欠落
+- 実証攻撃: 無効
+
+初回の`recon`は成果物の保存後に失敗しましたが、Shannonの自動再試行で完了しました。レポートは`.cache/shannon/workspaces/<workspace>/`に生成されます。
 
 ## 仕組み
 
