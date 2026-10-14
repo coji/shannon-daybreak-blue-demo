@@ -72,6 +72,17 @@ SHANNON_MODEL=openai:gpt-6.1-sol SHANNON_WORKSPACE=gpt-6-1-sol-run npm run shann
 
 2026年10月14日に、Daybreak Blueで分析専用スキャンと攻撃検証スキャンの全工程を完走しました。
 
+生成されたPDFを公開しています。どちらもこのリポジトリのローカルデモを対象にした、Shannonの出力原本です。
+
+| レポート | 内容 |
+| --- | --- |
+| [分析専用（PDF、8ページ）](reports/2026-10-14/daybreak-blue-analysis-only.pdf) | 攻撃検証なし。XSSはMedium、認証と所有権確認の欠落はHighと評価 |
+| [攻撃検証あり（PDF、11ページ）](reports/2026-10-14/daybreak-blue-exploit-validation.pdf) | 3件を再現。架空データと限定された影響を踏まえ、最終評価はすべてLow |
+
+PDF内の`CONFIDENTIAL`はShannonの出力表記です。内容は公開用の架空デモデータで、公開前に認証情報や個人情報が含まれないことを確認しています。Shannonの表示コストは推定値であり、追加の請求額ではありません。
+
+公開済みのレポートがリポジトリに含まれるため、以後のスキャン結果を過去のレポートを知らない独立した検出実験として扱わないでください。
+
 分析専用スキャン:
 
 - 所要時間: 51分4秒
