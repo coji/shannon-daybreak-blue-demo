@@ -51,6 +51,14 @@ SHANNON_WORKSPACE=daybreak-blue-run-2 npm run shannon:scan
 
 Shannonへ渡す既定のモデルは`openai:gpt-daybreak-blue-latest`です。`tools/shannon.yaml`では`exploit: 'false'`にしており、実証攻撃は行いません。
 
+意図的に脆弱なローカルデモに限り、別workspaceで最小限の実証攻撃を含むスキャンも実行できます。
+
+```bash
+SHANNON_WORKSPACE=daybreak-blue-exploit-run-1 npm run shannon:scan:exploit
+```
+
+`tools/shannon-exploit.yaml`は`exploit: 'true'`ですが、架空のメモリーデータだけを対象にし、破壊、永続化、総当たり、DoS、外部コールバック、データ持ち出しを禁止しています。公開環境や第三者のシステムには使わないでください。
+
 比較実験では`SHANNON_MODEL`でモデルだけを上書きできます。
 
 ```bash
@@ -62,13 +70,24 @@ SHANNON_MODEL=openai:gpt-6.1-sol SHANNON_WORKSPACE=gpt-6-1-sol-run npm run shann
 
 ## 検証結果
 
-2026年10月14日に、Daybreak Blueで全工程を完走しました。
+2026年10月14日に、Daybreak Blueで分析専用スキャンと攻撃検証スキャンの全工程を完走しました。
+
+分析専用スキャン:
 
 - 所要時間: 51分4秒
 - Shannonの表示コスト: $19.5633
 - 実行agent: 8（skipなし）
 - 検出結果: 反射型XSS、認証の欠落、オブジェクト所有権チェックの欠落
 - 実証攻撃: 無効
+
+攻撃検証スキャン:
+
+- 所要時間: 54分20秒
+- Shannonの表示コスト: $19.5194
+- 実行agent: 11（Injection ExploitとSSRF Exploitは対象なしでskip）
+- 実証結果: 反射型XSS、匿名でのノート取得、他ユーザーのノート取得を再現
+- 最終レポート: 3件ともLow。デモデータが架空で、書き込みや削除を行わない構成であることを反映
+- 安全境界: DOM置換とlocalStorageへのマーカー書き込み、架空ノートの読み取りまで。破壊、永続化、外部コールバック、DoSは未実施
 
 外部キャッシュへ切り替えた構成で、再試行なしに全工程が完了しました。レポートは`${XDG_CACHE_HOME:-$HOME/.cache}/shannon-daybreak-blue-demo/shannon-2468b67/workspaces/<workspace>/`に生成されます。
 
@@ -90,5 +109,5 @@ Shannon 3.4.0の標準workerはPi 0.84.4を使うため、Pi 0.99.0で追加さ�
 - デモデータはメモリー上の架空データだけです。
 - Shannonのcheckoutとレポートは対象リポジトリの外に置き、過去のスキャン結果を次のスキャンへ混入させません。
 - ローカルで生成される`.cache`、`.playwright`、`.shannon`、`workspaces`はGit管理から除外します。
-- スキャン設定は分析専用です。
+- 通常のスキャン設定は分析専用です。攻撃検証用の設定も、意図的に脆弱なこのローカルデモだけを対象にします。
 - 認証ファイル`~/.pi/agent/auth.json`をリポジトリへコピーしません。

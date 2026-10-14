@@ -10,8 +10,15 @@ readonly SHANNON="${SHANNON_DIR}/shannon"
 readonly DEFAULT_MODEL="openai:gpt-daybreak-blue-latest"
 readonly MODEL="${SHANNON_MODEL:-${DEFAULT_MODEL}}"
 readonly WORKSPACE="${SHANNON_WORKSPACE:-shannon-daybreak-blue-demo}"
+readonly CONFIG_INPUT="${SHANNON_CONFIG:-tools/shannon.yaml}"
+if [[ "${CONFIG_INPUT}" = /* ]]; then
+  readonly CONFIG="${CONFIG_INPUT}"
+else
+  readonly CONFIG="${REPO_ROOT}/${CONFIG_INPUT}"
+fi
 
 [[ -x "${SHANNON}" ]] || { echo "Run npm run shannon:build first." >&2; exit 1; }
+[[ -f "${CONFIG}" ]] || { echo "Shannon config not found: ${CONFIG}" >&2; exit 1; }
 if [[ "${MODEL}" != "${DEFAULT_MODEL}" && -z "${SHANNON_WORKSPACE:-}" ]]; then
   echo "Set SHANNON_WORKSPACE when comparing a non-default model." >&2
   exit 1
@@ -31,6 +38,6 @@ export SHANNON_AI_MODEL="${MODEL}"
     --url http://host.docker.internal:4173 \
     --repo "${REPO_ROOT}" \
     --workspace "${WORKSPACE}" \
-    --config "${REPO_ROOT}/tools/shannon.yaml" \
+    --config "${CONFIG}" \
     --follow
 )
