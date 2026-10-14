@@ -1,0 +1,62 @@
+# Shannon + Daybreak Blue demo
+
+ShannonをChatGPT SubscriptionのDaybreak Blueで動かす最小デモです。Shannon 3.4.0が内蔵するPi 0.84.4を、ローカルビルド時だけPi 1.2.0へ更新します。Shannon本体への変更やPRは必要ありません。
+
+> [!WARNING]
+> このアプリには、Shannonの検出確認用として反射型XSSと所有権確認漏れを意図的に入れています。ローカルのテストデータだけで動かしてください。公開サーバーへデプロイしないでください。
+
+## 必要なもの
+
+- macOSまたはLinux
+- Node.js 22以降
+- Docker
+- Git、jq、curl、Corepack
+- Pi 1.2.0以降
+- Daybreak Blueを利用できるChatGPTアカウント
+
+Piで`/login`を実行し、`Sign in with an account`から`OpenAI`へログインしておきます。
+
+## 実行
+
+```bash
+npm test
+npm run shannon:build
+```
+
+ターミナル1でデモアプリを起動します。
+
+```bash
+HOST=0.0.0.0 npm start
+```
+
+ターミナル2でDaybreak Blueの認証とモデルを検証します。
+
+```bash
+npm run shannon:validate
+```
+
+検証が通ったら、同じターミナルで分析専用スキャンを開始します。
+
+```bash
+npm run shannon:scan
+```
+
+Shannonへ渡すモデルは`openai:gpt-daybreak-blue-latest`です。`tools/shannon.yaml`では`exploit: 'false'`にしており、実証攻撃は行いません。
+
+## 仕組み
+
+`tools/build-shannon.sh`はShannonの特定コミットを`.cache/shannon`へcloneし、次の3パッケージだけを1.2.0へ更新してローカルworkerイメージを作ります。
+
+- `@earendil-works/pi-agent-core`
+- `@earendil-works/pi-ai`
+- `@earendil-works/pi-coding-agent`
+
+Shannon 3.4.0の標準workerはPi 0.84.4を使うため、Pi 0.99.0で追加されたOpenAIのChatGPT OAuthとDaybreak Blueを扱えません。Pi 1.2.0へ更新すると、`openai:gpt-daybreak-blue-latest`のモデル検証とCyber Access確認が通ります。
+
+## 安全上の境界
+
+- 対象は`host.docker.internal:4173`に固定しています。
+- デモデータはメモリー上の架空データだけです。
+- `.cache`とShannonの生成物はGit管理から除外します。
+- スキャン設定は分析専用です。
+- 認証ファイル`~/.pi/agent/auth.json`をリポジトリへコピーしません。

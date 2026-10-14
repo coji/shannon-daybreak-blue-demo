@@ -1,0 +1,16 @@
+{
+  "name": "shannon-daybreak-blue-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test",
+    "shannon:build": "bash tools/build-shannon.sh",
+    "shannon:validate": "bash tools/validate-daybreak.sh",
+    "shannon:scan": "bash tools/run-scan.sh"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

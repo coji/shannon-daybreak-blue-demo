@@ -1,0 +1,13 @@
+description: |
+  Authorized defensive review of an intentionally vulnerable local demo application.
+  Use only the supplied local target. Do not modify data or access other systems.
+
+agentic_sast:
+  enabled: 'true'
+
+exploit: 'false'
+
+rules_of_engagement: |
+  - Analyze and report the two intentional vulnerabilities without exploitation.
+  - Do not perform destructive actions, brute force, or denial-of-service testing.
+  - Do not access systems outside the supplied target and repository.

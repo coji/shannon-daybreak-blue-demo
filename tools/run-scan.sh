@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+readonly SHANNON="${REPO_ROOT}/.cache/shannon/shannon"
+
+[[ -x "${SHANNON}" ]] || { echo "Run npm run shannon:build first." >&2; exit 1; }
+curl --fail --silent --show-error --max-time 5 http://127.0.0.1:4173/ >/dev/null || {
+  echo "Start the demo first: HOST=0.0.0.0 npm start" >&2
+  exit 1
+}
+
+unset OPENAI_API_KEY OPENAI_BASE_URL SHANNON_AI_API_KEY SHANNON_AI_BASE_URL
+export SHANNON_USE_PI_AUTH=1
+export SHANNON_AI_MODEL=openai:gpt-daybreak-blue-latest
+
+"${SHANNON}" start \
+  --url http://host.docker.internal:4173 \
+  --repo "${REPO_ROOT}" \
+  --workspace shannon-daybreak-blue-demo \
+  --config "${REPO_ROOT}/tools/shannon.yaml" \
+  --follow
