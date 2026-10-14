@@ -55,13 +55,13 @@ Shannonへ渡すモデルは`openai:gpt-daybreak-blue-latest`です。`tools/sha
 
 2026年10月14日に、Daybreak Blueで全工程を完走しました。
 
-- 所要時間: 76分18秒
-- Shannonの表示コスト: $20.7914
+- 所要時間: 51分4秒
+- Shannonの表示コスト: $19.5633
 - 実行agent: 8（skipなし）
-- 検出結果: 反射型XSS、認証・オブジェクト所有権チェックの欠落
+- 検出結果: 反射型XSS、認証の欠落、オブジェクト所有権チェックの欠落
 - 実証攻撃: 無効
 
-初回の`recon`は成果物の保存後に失敗しましたが、Shannonの自動再試行で完了しました。レポートは`${XDG_CACHE_HOME:-$HOME/.cache}/shannon-daybreak-blue-demo/shannon-2468b67/workspaces/<workspace>/`に生成されます。
+外部キャッシュへ切り替えた構成で、再試行なしに全工程が完了しました。レポートは`${XDG_CACHE_HOME:-$HOME/.cache}/shannon-daybreak-blue-demo/shannon-2468b67/workspaces/<workspace>/`に生成されます。
 
 ## 仕組み
 
