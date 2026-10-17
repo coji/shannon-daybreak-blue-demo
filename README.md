@@ -49,7 +49,11 @@ npm run shannon:scan
 SHANNON_WORKSPACE=daybreak-blue-run-2 npm run shannon:scan
 ```
 
-Shannonへ渡す既定のモデルは`openai:gpt-daybreak-blue-latest`です。`tools/shannon.yaml`では`exploit: 'false'`にしており、実証攻撃は行いません。
+Shannonへ渡す既定のモデルは`openai:gpt-6-sol`です。Daybreak Blueは、承認済みのアカウントでGPT-6 SolまたはGPT-6 Lunaを使うと自動で適用されます。GPT-6 AstraとGPT-6.1 Solは、Blueのアクセスがあっても標準の制限のままです。
+
+以前の既定だった`openai:gpt-daybreak-blue-latest`は[非推奨のエイリアス](https://developers.openai.com/api/docs/models/gpt-daybreak-blue-latest.md)で、2026年10月16日以降はCyber Access確認が`OpenAiCyberAccessError`で失敗します。
+
+`tools/shannon.yaml`では`exploit: 'false'`にしており、実証攻撃は行いません。
 
 意図的に脆弱なローカルデモに限り、別workspaceで最小限の実証攻撃を含むスキャンも実行できます。
 
@@ -66,11 +70,11 @@ SHANNON_MODEL=openai:gpt-6.1-sol npm run shannon:validate
 SHANNON_MODEL=openai:gpt-6.1-sol SHANNON_WORKSPACE=gpt-6-1-sol-run npm run shannon:scan
 ```
 
-スキャンは`shannon:validate`が成功した場合だけ実行してください。別モデルの結果が既定workspaceへ混ざらないよう、既定以外のモデルでは`SHANNON_WORKSPACE`の指定を必須にしています。2026年10月14日の検証では、`gpt-6.1-sol`のCyber Access確認が`OpenAiCyberAccessError`で失敗したため、フルスキャンは開始していません。Daybreak Blueは同じ認証と対象でCyber Access確認を通過し、全工程を完走しました。
+スキャンは`shannon:validate`が成功した場合だけ実行してください。別モデルの結果が既定workspaceへ混ざらないよう、既定以外のモデルでは`SHANNON_WORKSPACE`の指定を必須にしています。2026年10月14日の検証では、`gpt-6.1-sol`のCyber Access確認が`OpenAiCyberAccessError`で失敗したため、フルスキャンは開始していません。Daybreak Blue（当時の`openai:gpt-daybreak-blue-latest`）は同じ認証と対象でCyber Access確認を通過し、全工程を完走しました。2026年10月17日の検証でも`gpt-6.1-sol`は同じエラーで失敗し、`gpt-6-sol`は通過しました。
 
 ## 検証結果
 
-2026年10月14日に、Daybreak Blueで分析専用スキャンと攻撃検証スキャンの全工程を完走しました。
+2026年10月14日に、Daybreak Blue（当時の既定`openai:gpt-daybreak-blue-latest`）で分析専用スキャンと攻撃検証スキャンの全工程を完走しました。
 
 生成されたPDFを公開しています。どちらもこのリポジトリのローカルデモを対象にした、Shannonの出力原本です。
 
@@ -112,7 +116,7 @@ PDF内の`CONFIDENTIAL`はShannonの出力表記です。内容は公開用の�
 
 pnpmの`minimumReleaseAge`は無効にせず、これらが依存する`@earendil-works/pi-*`だけを`minimumReleaseAgeExclude`へ追加します。
 
-Shannon 3.4.0の標準workerはPi 0.84.4を使うため、Pi 0.99.0で追加されたOpenAIのChatGPT OAuthとDaybreak Blueを扱えません。Pi 1.2.0へ更新すると、`openai:gpt-daybreak-blue-latest`のモデル検証とCyber Access確認が通ります。
+Shannon 3.4.0の標準workerはPi 0.84.4を使うため、Pi 0.99.0で追加されたOpenAIのChatGPT OAuthとDaybreak Blueを扱えません。Pi 1.2.0へ更新すると、`openai:gpt-6-sol`のモデル検証とCyber Access確認が通ります。
 
 ## 安全上の境界
 
