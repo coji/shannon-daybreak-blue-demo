@@ -51,7 +51,7 @@ SHANNON_WORKSPACE=daybreak-blue-run-2 npm run shannon:scan
 
 Shannonへ渡す既定のモデルは`openai:gpt-6-sol`です。Daybreak Blueは、承認済みのアカウントでGPT-6 SolまたはGPT-6 Lunaを使うと自動で適用されます。GPT-6 AstraとGPT-6.1 Solは、Blueのアクセスがあっても標準の制限のままです。
 
-以前の既定だった`openai:gpt-daybreak-blue-latest`は[非推奨のエイリアス](https://developers.openai.com/api/docs/models/gpt-daybreak-blue-latest.md)で、2026年10月16日以降はCyber Access確認が`OpenAiCyberAccessError`で失敗します。
+以前の既定だった`openai:gpt-daybreak-blue-latest`は[非推奨のエイリアス](https://developers.openai.com/api/docs/models/gpt-daybreak-blue-latest.md)です。作者の環境では、2026年10月16日と17日にCyber Access確認が`OpenAiCyberAccessError`で失敗しました。
 
 `tools/shannon.yaml`では`exploit: 'false'`にしており、実証攻撃は行いません。
 
